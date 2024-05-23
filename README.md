@@ -1,9 +1,31 @@
 # OData.QueryBuilder
 Library for creating complex OData queries (OData version 4.01) based on data models with linq syntax.
 
-[![Build Status](https://travis-ci.com/ZEXSM/OData.QueryBuilder.svg?branch=main)](https://travis-ci.com/ZEXSM/OData.QueryBuilder)
-[![Coverage Status](https://coveralls.io/repos/github/ZEXSM/OData.QueryBuilder/badge.svg?branch=master)](https://coveralls.io/github/ZEXSM/OData.QueryBuilder?branch=main)
-[![Nuget Status](https://img.shields.io/nuget/dt/OData.QueryBuilder.svg)](https://www.nuget.org/packages/OData.QueryBuilder)
+Forked from https://github.com/ZEXSM/OData.QueryBuilder
+
+## FourC customizations
+* Added ```ODataQueryBuilderOptions.CustomToQueryFunction``` to support custom query generation for specific types. Usage:
+```csharp
+var options = new ODataQueryBuilderOptions
+{
+    CustomToQueryFunction = obj => obj switch
+    {
+        DateOnly dateOnly => $"{dateOnly:o}",
+        SomeType something => "some string..."
+        _ => null
+    }
+};
+var queryBuilder = new ODataQueryBuilder(options);
+...
+```
+
+### Generating NuGet package
+Run:
+> dotnet pack -c Release -p:PackageVersion=_version_string_
+
+where _version_string_ is something like 2.10.0
+
+Then upload to FourC NuGet repository at https://nuget.fourc.net:12000/
 
 ## Benefits
 * Support:

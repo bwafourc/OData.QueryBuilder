@@ -5,7 +5,7 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<PackageId>OData.QueryBuilder</PackageId>
+		<PackageId>FourC.OData.QueryBuilder</PackageId>
 		<PackageVersion>$(PackageVersion)</PackageVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -19,6 +19,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>../../OData.QueryBuilder.snk</AssemblyOriginatorKeyFile>
+		<NoWarn>$(NoWarn);1591</NoWarn><!--Ignore warnings for Missing XML comments -->
 	</PropertyGroup>
 
 	<Target Name="RestoreTools" BeforeTargets="Build">

@@ -1,4 +1,6 @@
-﻿namespace OData.QueryBuilder.Options
+﻿using System;
+
+namespace OData.QueryBuilder.Options
 {
     public class ODataQueryBuilderOptions
     {
@@ -7,5 +9,7 @@
         public bool SuppressExceptionOfNullOrEmptyOperatorArgs { get; set; } = false;
 
         public bool UseCorrectDateTimeFormat { get; set; } = false;
+
+        public Func<object, string> CustomToQueryFunction { get; set; } = null;
     }
 }

@@ -41,29 +41,41 @@ namespace OData.QueryBuilder.Extensions
             return replaceValues;
         }
 
-        public static string ToQuery(this object @object, ODataQueryBuilderOptions options) => @object switch
+        public static string ToQuery(this object @object, ODataQueryBuilderOptions options)
         {
-            null => Null,
-            bool @bool => @bool ? "true" : "false",
-            DateTime dateTime => options switch
+            if (options.CustomToQueryFunction != null)
             {
-                { UseCorrectDateTimeFormat: true } =>
-                    $"{dateTime:yyyy-MM-ddTHH:mm:sszzz}".Replace("+", "%2B"),
-                _ => $"{dateTime:s}Z"
-            },
-            DateTimeOffset dateTimeOffset => options switch
+                var query = options.CustomToQueryFunction(@object);
+                if (query != null)
+                {
+                    return query;
+                }
+            }
+
+            return @object switch
             {
-                { UseCorrectDateTimeFormat: true } =>
-                    $"{dateTimeOffset:yyyy-MM-ddTHH:mm:sszzz}".Replace("+", "%2B"),
-                _ => $"{dateTimeOffset:s}Z"
-            },
-            string @string => $"'{@string}'",
-            ICollection collection => collection.CollectionToQuery(options),
-            IEnumerable enumerable => enumerable.EnumerableToQuery(options, initCount: 0),
-            Guid @guid => $"{@guid}",
-            decimal @decimal => Convert.ToString(@decimal, CultureInfo.InvariantCulture),
-            _ => @object.GetType().IsPrimitive ? Convert.ToString(@object, CultureInfo.InvariantCulture) : $"'{@object}'",
-        };
+                null => Null,
+                bool @bool => @bool ? "true" : "false",
+                DateTime dateTime => options switch
+                {
+                    { UseCorrectDateTimeFormat: true } =>
+                        $"{dateTime:yyyy-MM-ddTHH:mm:sszzz}".Replace("+", "%2B"),
+                    _ => $"{dateTime:s}Z"
+                },
+                DateTimeOffset dateTimeOffset => options switch
+                {
+                    { UseCorrectDateTimeFormat: true } =>
+                        $"{dateTimeOffset:yyyy-MM-ddTHH:mm:sszzz}".Replace("+", "%2B"),
+                    _ => $"{dateTimeOffset:s}Z"
+                },
+                string @string => $"'{@string}'",
+                ICollection collection => collection.CollectionToQuery(options),
+                IEnumerable enumerable => enumerable.EnumerableToQuery(options, initCount: 0),
+                Guid @guid => $"{@guid}",
+                decimal @decimal => Convert.ToString(@decimal, CultureInfo.InvariantCulture),
+                _ => @object.GetType().IsPrimitive ? Convert.ToString(@object, CultureInfo.InvariantCulture) : $"'{@object}'",
+            };
+        }
 
         private static string CollectionToQuery(
             this ICollection collection, ODataQueryBuilderOptions options) =>
