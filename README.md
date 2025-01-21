@@ -1,3 +1,5 @@
+MOVED TO 4C BITBUCKET!
+
 # OData.QueryBuilder
 Library for creating complex OData queries (OData version 4.01) based on data models with linq syntax.
 
